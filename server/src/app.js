@@ -15,7 +15,7 @@ app.use(express.static(static_path));
 app.post('/setdata', async (req, res) => {
     const {  temp, humidity, soilmoist, motorstatus } = req.body;
     let date= new Date();
-    if(temp && humidity && soilmoist && motorstatus)
+    if(temp && humidity && soilmoist )
     {
         try {
             const weatherdata = new Weatherdata({
