@@ -12,7 +12,7 @@ app.use(express.json());
 app.use(express.urlencoded({extend: false}));
 app.use(express.static(static_path));
 
-app.post('/setdata', async (req, res) => {
+app.post('/se', async (req, res) => {
     const {  temp, humidity, soilmoist, motorstatus } = req.body;
     let date= new Date();
     if(temp && humidity && soilmoist )
