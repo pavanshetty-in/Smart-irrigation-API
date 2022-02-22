@@ -1,12 +1,13 @@
 require('dotenv').config({path:"./../.env"});
 const express = require('express');
 const path = require('path');
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 const static_path = path.join(__dirname, '../public');
 const template_path = path.join(__dirname, "../templates/views");
+const date = require('date-and-time')
 const moment = require("moment");
-
 app.use((req, res, next)=>{
     res.locals.moment = moment;
     next();
@@ -28,14 +29,18 @@ app.get("/", async (req, res) => {
           throw new Error("Services not found");
         }
         const Weatherlatest10 = await Weatherdata.find().sort({ date: -1 }).limit(10) ;
-        let temparray=[],datearray=[]
+        let temparray=[],datearray=[],humiditydata=[],soildata=[]
 
         for(i=0;i<Weatherlatest10.length;i++){
             temparray.push(Weatherlatest10[i].temp)
-            datearray.push(Weatherlatest10[i].date)
+            humiditydata.push(Weatherlatest10[i].humidity)
+            soildata.push(Weatherlatest10[i].soilmoist)
+            datearray.push(String(date.format(Weatherlatest10[i].date,'DD.MM-HH-mm')))
+            
         }
-        
-        res.render("index",{Weatherlatest:Weatherlatest,temparray:temparray,datearray:datearray });
+        console.log(temparray)
+        console.log(datearray)
+        res.render("index",{Weatherlatest:Weatherlatest,temparray:temparray.reverse(),datearray:datearray.reverse(),Weatherlatest10:Weatherlatest10,humiditydata:humiditydata.reverse(),soildata:soildata.reverse()});
     }
     catch (err) {
         res.status(401).send("Unauthorized:No token provided");

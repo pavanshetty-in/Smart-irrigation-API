@@ -76,24 +76,42 @@
       </div>
 
     </section>
-    <section class="container">
-      <canvas id="myChart" width="400" height="400"></canvas>
+    <section class="container my-5">
+      <canvas id="myChart" width="400" height="100"></canvas>
+    </section>
+    <section class="container-fluid  my-2 py-4" style="background-color: #ffffff;">
+    <section class="container" >
+      <canvas id="myChart2" width="400" height="150"></canvas>
+    </section>
+  </section>
+    <section class="container my-5">
+      <canvas id="myChart1" width="400" height="100"></canvas>
+    </section>
+    <section class="container-fluid" style="background-color: black;">
+      <div class="container py-5 text-light">
+        <h1 class="lead ">Smart Irrigation System</h1>
+        <h6 class="small mt-3">This is IOT Projects Data Visualization Site</h6>
+        
+      </div>
     </section>
     
 
 </body>
 <script>
+  
   const tempdata = {
-  labels: datearray,
+    
+  labels: [1,2,3,4,5,6,7,8,9,10],
   datasets: [
     {
-      label: 'Temp',
-      data: temparray,
-      borderColor: Utils.CHART_COLORS.red,
-      backgroundColor: Utils.transparentize(Utils.CHART_COLORS.red, 0.5),
+      label: 'Temperature',
+      data:<%= JSON.stringify(temparray); %>,
+      borderColor: 'rgba(255, 99, 132, 0.5)',
+      backgroundColor: 'rgba(255, 99, 132, 0.2)',
       pointStyle: 'circle',
       pointRadius: 5,
-      pointHoverRadius: 15
+      pointHoverRadius: 15,
+      tension: 0.5,
     }
   ]
 };
@@ -105,7 +123,7 @@ const config = {
     plugins: {
       title: {
         display: true,
-        text: (ctx) => 'Point Style: ' ,
+        text: (ctx) => 'Temperature' ,
       }
     }
   }
@@ -121,9 +139,87 @@ const actions = [
       chart.data.datasets.forEach(dataset => {
         dataset.pointStyle = 'cirlce';
       });
+      
+      chart.update();
+    }
+  },
+  {
+    name: 'Smooth',
+    handler(chart) {
+      smooth = !smooth;
+      chart.options.elements.line.tension = smooth ? 0.4 : 0;
       chart.update();
     }
   }
 ]
+
+const humidata = {
+    
+    labels: [1,2,3,4,5,6,7,8,9,10],
+    datasets: [
+      {
+        label: 'Humidity',
+        data:<%= JSON.stringify(humiditydata); %>,
+        borderColor: 'rgba(255,205,86, 0.9)',
+        backgroundColor: 'rgba(255,205,86, 0.2)',
+        pointStyle: 'circle',
+        pointRadius: 5,
+        pointHoverRadius: 15
+      }
+    ]
+  };
+  const config1 = {
+    type: 'line',
+    data: humidata,
+    options: {
+      responsive: true,
+      plugins: {
+        title: {
+          display: true,
+          text: (ctx) => 'Humidity' ,
+        }
+      }
+    }
+  };
+  var myChart1 = new Chart(
+        document.getElementById('myChart1'),
+        config1
+      );
+
+      // bar chart
+  
+const soildata = {
+  labels: [1,2,3,4,5,6,7,8,9,10],
+  datasets: [{
+    label: 'Soil Moisture',
+    data: <%= JSON.stringify(soildata); %>,
+    backgroundColor: [
+      'rgba(54, 162, 235, 0.5)'
+    ],
+    borderColor: [ 
+      'rgb(54, 162, 235)'
+    ],
+    borderWidth: 1
+  }]
+};
+const config2 = {
+  type: 'bar',
+  data: soildata,
+  options: {
+    scales: {
+      y: {
+        beginAtZero: true
+      }
+    },
+    title: {
+          display: true,
+          text: (ctx) => 'Soil Moisture' ,
+        }
+  },
+};
+var myChart2 = new Chart(
+        document.getElementById('myChart2'),
+        config2
+      );
 </script>
 </html>
