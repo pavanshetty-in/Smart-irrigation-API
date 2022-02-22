@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Irrigation</title>
+
+    <script src="https://kit.fontawesome.com/154fa5a621.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
+<style>
+  *{margin: 0;
+  padding: 0;}
+  .card
+  {
+    min-width: 15vw;
+    margin-top:5px;
+  }
+</style>
+</head>
+<body class='container-fluid p-0' style="background-color: #F8F9FA">
+    <section class="container-fluid " style="background-color: black;">
+      <div class="container py-3 d-flex align-items-center">
+        <img src="https://www.rnsit.ac.in/images/RNSIT.png" width='70'>
+        <p class="lead text-light justify-content-center align-content-center m-0 " >Smart Irrigation Dashboard</p>
+        
+      </div>
+    </section>
+    <section class="container my-md-5 d-flex justify-content-between flex-column flex-md-row">
+      <div class="card shadow">
+        <div class="card-body">
+          <h2 class="lead">Soil Moisture</h2>
+          <h1 class="card-title"><%= Weatherlatest.soilmoist %>%</h1>
+         
+        </div>
+        <div class="card-footer text-muted">
+          <%=  moment(Weatherlatest.date).format('Do MMMM, YYYY - HH:mm:ss') %>
+        </div>
+      </div>
+
+      <div class="card shadow">
+        <div class="card-body">
+          <h2 class="lead">Temparature</h2>
+          <h1 class="card-title"><%= Weatherlatest.temp %>C</h1>
+         
+        </div>
+        <div class="card-footer text-muted">
+          <%=  moment(Weatherlatest.date).format('Do MMMM, YYYY - HH:mm:ss') %>
+        </div>
+      </div>
+      <div class="card shadow">
+        <div class="card-body">
+          <h2 class="lead">Humidity</h2>
+          <h1 class="card-title"><%= Weatherlatest.humidity %>%</h1>
+         
+        </div>
+        <div class="card-footer text-muted">
+          <%=  moment(Weatherlatest.date).format('Do MMMM, YYYY - HH:mm:ss') %>
+        </div>
+      </div>
+      <div class="card shadow">
+        <div class="card-body">
+          <h2 class="lead">Motor Status</h2>
+          <% if(Weatherlatest.motorstatus) { %>
+          <h2 class="card-title text-success">ON</h2>
+          <% } else { %>
+            <h2 class="card-title text-info">OFF</h2>
+          <% } %>
+        </div>
+        <div class="card-footer text-muted">
+          <%=  moment(Weatherlatest.date).format('Do MMMM, YYYY - HH:mm:ss') %>
+        </div>
+      </div>
+
+    </section>
+    <section class="container">
+      <canvas id="myChart" width="400" height="400"></canvas>
+    </section>
+    
+
+</body>
+<script>
+  const tempdata = {
+  labels: datearray,
+  datasets: [
+    {
+      label: 'Temp',
+      data: temparray,
+      borderColor: Utils.CHART_COLORS.red,
+      backgroundColor: Utils.transparentize(Utils.CHART_COLORS.red, 0.5),
+      pointStyle: 'circle',
+      pointRadius: 5,
+      pointHoverRadius: 15
+    }
+  ]
+};
+const config = {
+  type: 'line',
+  data: tempdata,
+  options: {
+    responsive: true,
+    plugins: {
+      title: {
+        display: true,
+        text: (ctx) => 'Point Style: ' ,
+      }
+    }
+  }
+};
+var myChart = new Chart(
+      document.getElementById('myChart'),
+      config
+    );
+const actions = [
+  {
+    name: 'pointStyle: circle (default)',
+    handler: (chart) => {
+      chart.data.datasets.forEach(dataset => {
+        dataset.pointStyle = 'cirlce';
+      });
+      chart.update();
+    }
+  }
+]
+</script>
+</html>
