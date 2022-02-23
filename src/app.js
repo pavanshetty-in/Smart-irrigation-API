@@ -41,8 +41,8 @@ app.get("/", async (req, res) => {
             datearray.push(String(date.format(Weatherlatest10[i].date,'DD.MM-HH-mm')))
             
         }
-        console.log(temparray)
-        console.log(datearray)
+        // console.log(temparray)
+        // console.log(datearray)
         res.render("index",{Weatherlatest:Weatherlatest,temparray:temparray.reverse(),datearray:datearray.reverse(),Weatherlatest10:Weatherlatest10,humiditydata:humiditydata.reverse(),soildata:soildata.reverse()});
     }
     catch (err) {
@@ -73,44 +73,22 @@ app.post('/se', async (req, res) => {
     else{console.log("Values can't be empty")}
 });
 
-// Telegram Bot Server
-bot.command('start', ctx => {
-    console.log(ctx.from)
-    bot.telegram.sendMessage(ctx.chat.id, 'Hello there! Welcome to Smart Irrigation Project bot.', {
-    })
-})
-bot.hears('status', ctx => {
-    console.log(ctx.from)
-    let animalMessage = `great, here you can get status`;
-    ctx.deleteMessage();
-    bot.telegram.sendMessage(ctx.chat.id, animalMessage, {
-        reply_markup: {
-            inline_keyboard: [
-                [{
-                        text: "latest status",
-                        callback_data: 'status'
-                    },
-                    {
-                        text: "About",
-                        callback_data: 'about'
-                    }
-                ],
-
-            ]
+app.get('/latest', async (req, res) => {
+    try {
+        const Weatherlatest = await Weatherdata.findOne().sort({ date: -1 }).limit(1) ;
+        if (!Weatherlatest) {
+          throw new Error("Services not found");
         }
-    })
-})
-bot.action('status', ctx => {
-    bot.telegram.sendMessage(ctx.chat.id, 'Hii stautu is 46%', {
-    })
-    
+        res.send(Weatherlatest)
+    }
+    catch (err) {
+        console.error(err);
+    }
 
-})
-bot.action('about', ctx => {
-    bot.telegram.sendMessage(ctx.chat.id, 'Hi By pavan shetty', {
-    })
+});
 
-})
+// Telegram Bot Server
+
 
 
 
