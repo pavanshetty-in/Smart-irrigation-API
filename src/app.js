@@ -16,6 +16,9 @@ app.use((req, res, next)=>{
 require('./db/conn');
 const Weatherdata= require('./models/weatherdataSchema');
 
+const { Telegraf } = require('telegraf');
+const bot = new Telegraf('5296633223:AAFS40bDHchCnkmT9A1jju_G58rRQIrCd-w');
+
 app.use(express.json());
 app.use(express.urlencoded({extend: false}));
 app.set("view engine", "ejs");
@@ -69,6 +72,46 @@ app.post('/se', async (req, res) => {
     }
     else{console.log("Values can't be empty")}
 });
+
+// Telegram Bot Server
+bot.command('start', ctx => {
+    console.log(ctx.from)
+    bot.telegram.sendMessage(ctx.chat.id, 'Hello there! Welcome to Smart Irrigation Project bot.', {
+    })
+})
+bot.hears('status', ctx => {
+    console.log(ctx.from)
+    let animalMessage = `great, here you can get status`;
+    ctx.deleteMessage();
+    bot.telegram.sendMessage(ctx.chat.id, animalMessage, {
+        reply_markup: {
+            inline_keyboard: [
+                [{
+                        text: "latest status",
+                        callback_data: 'status'
+                    },
+                    {
+                        text: "About",
+                        callback_data: 'about'
+                    }
+                ],
+
+            ]
+        }
+    })
+})
+bot.action('status', ctx => {
+    bot.telegram.sendMessage(ctx.chat.id, 'Hii stautu is 46%', {
+    })
+    
+
+})
+bot.action('about', ctx => {
+    bot.telegram.sendMessage(ctx.chat.id, 'Hi By pavan shetty', {
+    })
+
+})
+
 
 
 app.listen(PORT, () => {
